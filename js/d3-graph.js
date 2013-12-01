@@ -43,17 +43,14 @@
   };
 
   window.mateGraph = function(facebookMutualFriendObject) {
-    var click, defs, e, force, friendData, friends, g, h, link, links, loadGraficNodes, loadGraphNode, mouseout, mouseover, node, r, svg, tick, w, z, zoom;
+    var click, defs, e, force, friendData, friends, g, h, link, links, loadGraficNodes, loadGraphNode, mouseout, mouseover, node, r, svg, tick, w, z;
     e = document.documentElement;
     g = document.getElementsByTagName('body')[0];
     w = window.innerWidth || e.clientWidth || g.clientWidth;
     h = window.innerHeight || e.clientHeight || g.clientHeight;
     r = 12.5;
     z = d3.scale.category20c();
-    zoom = function() {
-      return svg.attr("transform", "translate(" + d3.event.translate + ")scale(" + d3.event.scale + ")");
-    };
-    svg = d3.select("#chart").append("svg:svg").attr("width", w).attr("height", h).append("g").call(d3.behavior.zoom().scaleExtent([1, 8]).on("zoom", zoom)).append("g");
+    svg = d3.select("#chart").append("svg:svg").attr("width", w).attr("height", h);
     defs = svg.append("svg:defs");
     defs.append("svg:clipPath").attr("id", "clipCircleSmall").append("svg:circle").attr("r", r).attr("cx", 0).attr("cy", 0);
     defs.append("svg:clipPath").attr("id", "clipCircleLarge").append("svg:circle").attr("r", 2 * r).attr("cx", 0).attr("cy", 0);
@@ -72,8 +69,8 @@
       });
       return node.attr("transform", function(d) {
         var x, y;
-        x = d.x;
-        y = d.y;
+        x = Math.max(r, Math.min(w - r, d.x));
+        y = Math.max(r, Math.min(h - r, d.y));
         return "translate(" + x + "," + y + ")";
       });
     };
