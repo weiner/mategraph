@@ -56,67 +56,6 @@ facebookMutualFriendObjectToD3Mapp = (facebookMutualFriendObject) ->
     links: links
   }
 
-#   friendLookupMap = {}
-#   i = 0
-#   for friend in friendsArray
-#     console.log friend.uid
-#     friendLookupMap[friend.uid] = i
-#     i++
-#     console.log friendLookupMap
-
-#   for friend in friendsArray
-#     for friendsFriendId in friend.friends
-#       if(friendLookupMap[friend.uid] < friendLookupMap[friendsFriendId])  
-
-#         link =
-#           source: friendLookupMap[friend.uid]
-#           target: friendLookupMap[friendsFriendId]
-#         # console.log link  
-#         links.push link 
-
-
-# #############
-
-#       friendsArray = fqlFriendList #res.data[0].fql_result_set
-#       friendHashMap = {}
-#       for friendObj in friendsArray
-#         friendHashMap[friendObj.uid] = friendObj
-      
-      
-#       async.map friendsArray, ((friend,cb)-> getMutualfriends(req,friend,cb)),(err, results)->
-#         console.log err
-
-#         console.log "results", results
-        
-#         for mutualfriends in results
-#           for friendUid, friendsMutualFriends of mutualfriends
-#             friendHashMap[friendUid].friends = friendsMutualFriends
-        
-
-
-#         links = []
-#         friendLookupMap = {}
-#         i = 0
-#         for friend in friendsArray
-#           console.log friend.uid
-#           friendLookupMap[friend.uid] = i
-#           i++
-#           console.log friendLookupMap
-
-#         for friend in friendsArray
-#           for friendsFriendId in friend.friends
-#             if(friendLookupMap[friend.uid] < friendLookupMap[friendsFriendId])  
-
-#               link =
-#                 source: friendLookupMap[friend.uid]
-#                 target: friendLookupMap[friendsFriendId]
-#               # console.log link  
-#               links.push link 
-
-
-
-
-
 window.mateGraph = (facebookMutualFriendObject)->
   
   
@@ -130,11 +69,18 @@ window.mateGraph = (facebookMutualFriendObject)->
   z = d3.scale.category20c()
 
   #.alpha(0.1)
+  zoom = ()->
+    svg.attr("transform", "translate(" + d3.event.translate + ")scale(" + d3.event.scale + ")");
+
 
   svg = d3.select("#chart")
     .append("svg:svg")
     .attr("width", w)
     .attr("height", h)
+    .append("g")
+    .call(d3.behavior.zoom().scaleExtent([1, 8]).on("zoom", zoom))
+    .append("g")
+    
 
   defs = svg.append("svg:defs")
   defs.append("svg:clipPath")
@@ -205,8 +151,14 @@ window.mateGraph = (facebookMutualFriendObject)->
       d.target.y
 
     node.attr "transform", (d) ->
-      x = Math.max(r, Math.min(w - r, d.x))
-      y = Math.max(r, Math.min(h - r, d.y))
+      # bounding box
+      # x = Math.max(r, Math.min(w - r, d.x))
+      # y = Math.max(r, Math.min(h - r, d.y))
+
+      #no bounding box
+      x = d.x
+      y = d.y
+
       # console.log x ,y
       "translate(" + x + "," + y + ")"
 
