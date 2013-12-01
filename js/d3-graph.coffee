@@ -125,8 +125,7 @@ window.mateGraph = (facebookMutualFriendObject)->
   w = window.innerWidth || e.clientWidth || g.clientWidth
   h = window.innerHeight|| e.clientHeight|| g.clientHeight;
 
-  # w = $(window).width()
-  # h = $(window).height()
+
   r = 12.5
   z = d3.scale.category20c()
 
